@@ -13,6 +13,7 @@ public class Elevator extends SubsystemBase {
     
     private CANSparkMax leftVerticalMotor;
     private CANSparkMax rightVerticalMotor;
+    //need to figure out units
     private TrapezoidProfile.Constraints motionProfile = new TrapezoidProfile.Constraints(10,20);
     private TrapezoidProfile.State goal = new TrapezoidProfile.State();
     private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();

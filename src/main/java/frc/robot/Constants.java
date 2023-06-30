@@ -36,14 +36,14 @@ public final class Constants {
 
     public static final int GYRO_PORT = 0;
 
-    public static final int FL_POWER = 0;
-    public static final int FL_STEER = 1;
-    public static final int FR_POWER = 2;
-    public static final int FR_STEER = 3;
-    public static final int BL_POWER = 4;
-    public static final int BL_STEER = 5;
-    public static final int BR_POWER = 6;
-    public static final int BR_STEER = 7;
+    public static final int FL_POWER = 7;
+    public static final int FL_STEER = 5;
+    public static final int FR_POWER = 6;
+    public static final int FR_STEER = 4;
+    public static final int BL_POWER = 11;
+    public static final int BL_STEER = 9;
+    public static final int BR_POWER = 10;
+    public static final int BR_STEER = 8;
 
     public static final double SWERVE_MAX_SPEED = 3.87096;
     public static final double SWERVE_ROTATION_MAX_SPEED = 3;

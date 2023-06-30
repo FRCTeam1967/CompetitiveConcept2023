@@ -25,18 +25,18 @@ public class RobotContainer {
   private final Joystick rightJoystick = new Joystick(1);
 
   //will move elevator to 40 in position
-  // private final Command elevatorHigh = new RunCommand(() -> {
-  //     elevator.moveTo(40);
-  // }, elevator);
+  /*private final Command elevatorHigh = new RunCommand(() -> {
+      elevator.moveTo(40);
+  }, elevator);
 
-  // //will move to 50 in and wait until next command 
-  // private final Command elevateAndWait = new FunctionalCommand(
-  //   () -> {}, 
-  //   () -> {elevator.moveTo(50);}, 
-  //   x -> {}, 
-  //   () -> {return elevator.isAtHeight(50);}, 
-  //   elevator
-  // );
+  //will move to 50 in and wait until next command 
+  private final Command elevateAndWait = new FunctionalCommand(
+    () -> {}, 
+    () -> {elevator.moveTo(50);}, 
+    x -> {}, 
+    () -> {return elevator.isAtHeight(50);}, 
+    elevator
+  );*/
 
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
