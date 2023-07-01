@@ -2,9 +2,11 @@ package frc.robot.modules;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
 import com.revrobotics.SparkMaxAbsoluteEncoder;
 import com.revrobotics.SparkMaxPIDController;
@@ -17,19 +19,24 @@ public class SwerveModule {
     private CANSparkMax powerController;
     private CANSparkMax steerController;
 
+    private String name;
+
     public SwerveModule(String name, int powerIdx, int steerIdx) {
+        this.name = name;
         powerController = new CANSparkMax(powerIdx, MotorType.kBrushless);
+        powerController.restoreFactoryDefaults();
         //defining PID for power motor
         SparkMaxPIDController powerPIDController = powerController.getPIDController();
         powerPIDController.setP(Constants.Swerve.POWER_kP);
         powerPIDController.setI(Constants.Swerve.POWER_kI);
         powerPIDController.setD(Constants.Swerve.POWER_kD);
         //setting lower power bound at deadband and upper bound at max output
-        powerPIDController.setOutputRange(Constants.Swerve.DEFAULT_NEUTRAL_DEADBAND, Constants.Swerve.MAX_OUTPUT);
+        powerPIDController.setOutputRange(-Constants.Swerve.MAX_OUTPUT, Constants.Swerve.MAX_OUTPUT);
         //using neo's encoder for power motor feedback
         powerPIDController.setFeedbackDevice(powerController.getEncoder());
         
         steerController = new CANSparkMax(steerIdx, MotorType.kBrushless);
+        steerController.restoreFactoryDefaults();
         //defining PID for steer motor
         SparkMaxPIDController steerPIDController = steerController.getPIDController();
         steerPIDController.setP(Constants.Swerve.STEER_kP);
@@ -47,11 +54,17 @@ public class SwerveModule {
         steerPIDController.setPositionPIDWrappingMinInput(0);
         steerPIDController.setPositionPIDWrappingMaxInput(360);
 
-        steerPIDController.setOutputRange(Constants.Swerve.DEFAULT_NEUTRAL_DEADBAND, Constants.Swerve.MAX_OUTPUT);
+        steerPIDController.setOutputRange(-Constants.Swerve.MAX_OUTPUT, Constants.Swerve.MAX_OUTPUT);
         steerPIDController.setFeedbackDevice(analogEncoder);
+
+        powerController.burnFlash();
+        steerController.burnFlash();
+
+        powerController.stopMotor();
+        steerController.stopMotor();
     }
 
-    //not used right now - get current state for module (velocity * gear ratio) and degrees from steer controller
+    //get current state for module (velocity * gear ratio) and degrees from steer controller
     public SwerveModuleState getState() {
         return new SwerveModuleState(powerController.getEncoder().getVelocity()*Constants.Swerve.OUTPUT_GEAR_RATIO,
         Rotation2d.fromDegrees(steerController.getEncoder().getPosition())); 
@@ -63,12 +76,13 @@ public class SwerveModule {
         //     stop();
         //     return;
         // }
-        
+
         //minimize the change in heading of motor (ex: turn 90 deg instead of 270)
         state = SwerveModuleState.optimize(state, getState().angle);
         //set reference - set desired power and steer reference for each pid controller
         powerController.getPIDController().setReference(state.speedMetersPerSecond / Constants.Swerve.OUTPUT_GEAR_RATIO, ControlType.kVelocity);
         steerController.getPIDController().setReference(state.angle.getDegrees(), ControlType.kPosition);
+
     }
 
     public void stop() {
@@ -76,5 +90,8 @@ public class SwerveModule {
         powerController.getPIDController().setReference(0, ControlType.kVelocity);
     }
     
+    public void periodic() {
+        
+    }
 }
 

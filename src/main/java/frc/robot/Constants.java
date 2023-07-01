@@ -17,16 +17,16 @@ public final class Constants {
   }
 
   public static class Swerve {
-    public static final double POWER_kP = 0.55;
+    public static final double POWER_kP = 0.0001;
     public static final double POWER_kI = 0;
     public static final double POWER_kD = 0;
 
-    public static final double STEER_kP = 0.34;
+    public static final double STEER_kP = 0.03;
     public static final double STEER_kI = 0;
     public static final double STEER_kD = 0;
 
     public static final double DEFAULT_NEUTRAL_DEADBAND = 0.05;
-    public static final double MAX_OUTPUT = 0.2;
+    public static final double MAX_OUTPUT = 0.7;
     public static final int ANALOG_SAMPLE_DEPTH = 16;
 
     //0.0053 = circumference in meters/60
@@ -46,7 +46,7 @@ public final class Constants {
     public static final int BR_STEER = 8;
 
     public static final double SWERVE_MAX_SPEED = 3.87096;
-    public static final double SWERVE_ROTATION_MAX_SPEED = 3;
+    public static final double SWERVE_ROTATION_MAX_SPEED = 10;
     public static final double SWERVE_DEADBAND = 0.05;
 
     public static final double WIDTH = Units.inchesToMeters(26);
@@ -71,5 +71,33 @@ public final class Constants {
     public static final double kD = 0;
 
   }
+
+  public static class Wrist {
+    public static final int WRIST_MOTOR_IDX = 8;
+
+    public static final double kP = 0.55;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double GEAR_RATIO = 0.1;
+
+    public static final double STARTING_ANGLE = 45;
+
+  }
+
+  public static class Intake {
+    public static final int INTAKE_MOTOR_IDX = 8;
+
+    public static final double kP = 0.55;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double INTAKE_CUBE_SPEED = -0.2;
+    public static final double SHOOT_HIGH_CUBE_SPEED = 0.5;
+    public static final double SHOOT_MIDDLE_CUBE_SPEED = 0.3;
+    public static final double SHOOT_LOW_CUBE_SPEED = 0.2;
+
+  }
+
 
 }

@@ -4,6 +4,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import frc.robot.Constants;
 import frc.robot.modules.SwerveModule;
@@ -34,7 +35,7 @@ public class Swerve extends SubsystemBase {
 
     //takes in degrees and returns rotation object with desired angle
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(gyro.getAngle());
+        return Rotation2d.fromDegrees(-gyro.getAngle()-90);
     }
     
     public SwerveModuleState[] getModuleStates() {
@@ -55,7 +56,10 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic() {
-      
+      frontLeft.periodic();
+      frontRight.periodic();
+      backLeft.periodic();
+      backRight.periodic();
     }
 
 }
