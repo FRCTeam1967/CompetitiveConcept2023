@@ -6,6 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
 public final class Constants {
@@ -29,9 +30,10 @@ public final class Constants {
     public static final double MAX_OUTPUT = 0.7;
     public static final int ANALOG_SAMPLE_DEPTH = 16;
 
-    //0.0053 = circumference in meters/60
+    //0.319024 = circumference in meters
     //7.8:1 = flipped drive gear ratio
-    public static final double OUTPUT_GEAR_RATIO = 0.0053 / 7.8;
+    public static final double REV_TO_METERS = 0.319024 / 7.8;
+    public static final double RPM_TO_MS = REV_TO_METERS / 60;
     // public static final double COUNTS_PER_100MS = 4201;
 
     public static final int GYRO_PORT = 0;
@@ -97,6 +99,21 @@ public final class Constants {
     public static final double SHOOT_MIDDLE_CUBE_SPEED = 0.3;
     public static final double SHOOT_LOW_CUBE_SPEED = 0.2;
 
+  }
+
+  public static class Auto {
+    public static final double kMaxSpeedMetersPerSecond = 1;
+    public static final double kMaxAccelerationMetersPerSecondSquared = 3;
+    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
+    public static final double kPXController = 1;
+    public static final double kPYController = 1;
+    public static final double kPThetaController = 1;
+
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
+        new TrapezoidProfile.Constraints(
+            kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
 
 

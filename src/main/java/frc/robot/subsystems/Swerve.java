@@ -1,6 +1,9 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -17,13 +20,21 @@ public class Swerve extends SubsystemBase {
     private final SwerveModule backLeft;
     private final SwerveModule backRight;
 
-    private ADIS16470_IMU gyro = new ADIS16470_IMU();
+    private final ADIS16470_IMU gyro;
+    private final SwerveDriveOdometry odometry;
+    private Pose2d pose;
     
     public Swerve() {
         frontLeft = new SwerveModule("FrontLeft", Constants.Swerve.FL_POWER, Constants.Swerve.FL_STEER);
         frontRight = new SwerveModule("FrontRight", Constants.Swerve.FR_POWER, Constants.Swerve.FR_STEER);
         backLeft = new SwerveModule("BackLeft", Constants.Swerve.BL_POWER, Constants.Swerve.BL_STEER);
         backRight = new SwerveModule("BackRight", Constants.Swerve.BR_POWER, Constants.Swerve.BR_STEER);
+        
+        gyro = new ADIS16470_IMU();
+        odometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_DRIVE_KINEMATICS, getRotation2d(), 
+        new SwerveModulePosition[] {
+            frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
+        });
     }
 
     public void stopModules() {
@@ -35,7 +46,8 @@ public class Swerve extends SubsystemBase {
 
     //takes in degrees and returns rotation object with desired angle
     public Rotation2d getRotation2d() {
-        return Rotation2d.fromDegrees(-gyro.getAngle()-90);
+        var degrees = -gyro.getAngle() - 90;
+        return Rotation2d.fromDegrees(degrees);
     }
     
     public SwerveModuleState[] getModuleStates() {
@@ -54,12 +66,28 @@ public class Swerve extends SubsystemBase {
         backRight.setState(desiredStates[3]);
     }
 
+    public Pose2d getPose() {
+        return pose;
+    }
+
+    public void resetOdometry (Pose2d pose) {
+        odometry.resetPosition(getRotation2d(), new SwerveModulePosition[] {
+            frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
+        }, pose);
+    }
+
     @Override
     public void periodic() {
       frontLeft.periodic();
       frontRight.periodic();
       backLeft.periodic();
       backRight.periodic();
+
+      pose = odometry.update(getRotation2d(), new SwerveModulePosition[] {
+        frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
+      });
+
+      SmartDashboard.putNumber("gyro", gyro.getAngle());
     }
 
 }

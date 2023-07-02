@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxAbsoluteEncoder.Type;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants;
@@ -66,9 +67,14 @@ public class SwerveModule {
 
     //get current state for module (velocity * gear ratio) and degrees from steer controller
     public SwerveModuleState getState() {
-        return new SwerveModuleState(powerController.getEncoder().getVelocity()*Constants.Swerve.OUTPUT_GEAR_RATIO,
+        return new SwerveModuleState(powerController.getEncoder().getVelocity()*Constants.Swerve.RPM_TO_MS,
         Rotation2d.fromDegrees(steerController.getEncoder().getPosition())); 
     }
+
+    public SwerveModulePosition getPosition() {
+        return new SwerveModulePosition(
+            powerController.getEncoder().getPosition()*Constants.Swerve.REV_TO_METERS, getState().angle);
+      }
 
     //takes in the desired state of module and sets it to the current state
     public void setState(SwerveModuleState state) {
@@ -80,7 +86,7 @@ public class SwerveModule {
         //minimize the change in heading of motor (ex: turn 90 deg instead of 270)
         state = SwerveModuleState.optimize(state, getState().angle);
         //set reference - set desired power and steer reference for each pid controller
-        powerController.getPIDController().setReference(state.speedMetersPerSecond / Constants.Swerve.OUTPUT_GEAR_RATIO, ControlType.kVelocity);
+        powerController.getPIDController().setReference(state.speedMetersPerSecond / Constants.Swerve.RPM_TO_MS, ControlType.kVelocity);
         steerController.getPIDController().setReference(state.angle.getDegrees(), ControlType.kPosition);
 
     }
