@@ -22,6 +22,8 @@ public class SwerveModule {
 
     private String name;
 
+    private SparkMaxAbsoluteEncoder analogEncoder = steerController.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+
     public SwerveModule(String name, int powerIdx, int steerIdx) {
         this.name = name;
         powerController = new CANSparkMax(powerIdx, MotorType.kBrushless);
@@ -44,7 +46,7 @@ public class SwerveModule {
         steerPIDController.setI(Constants.Swerve.STEER_kI);
         steerPIDController.setD(Constants.Swerve.STEER_kD);
         //using canandcoder for steer controller encoder
-        var analogEncoder = steerController.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
+        //var analogEncoder = steerController.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
         //set bit size depth for encoder at 16 (usually 16, 32, 64, etc)
         analogEncoder.setAverageDepth(Constants.Swerve.ANALOG_SAMPLE_DEPTH);
         //multiply native encoder units by 360 for each full rev
@@ -73,7 +75,7 @@ public class SwerveModule {
 
     public SwerveModulePosition getPosition() {
         return new SwerveModulePosition(
-            powerController.getEncoder().getPosition()*Constants.Swerve.REV_TO_METERS, getState().angle);
+            analogEncoder.getPosition()*Constants.Swerve.REV_TO_METERS, getState().angle);
       }
 
     //takes in the desired state of module and sets it to the current state
