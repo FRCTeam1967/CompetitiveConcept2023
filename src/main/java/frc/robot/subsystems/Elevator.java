@@ -1,55 +1,60 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.ControlType;
-import com.revrobotics.SparkMaxPIDController;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
-
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
+import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+
 public class Elevator extends SubsystemBase {
-    
-    private CANSparkMax leftVerticalMotor;
-    private CANSparkMax rightVerticalMotor;
-    //need to figure out units
-    private TrapezoidProfile.Constraints motionProfile = new TrapezoidProfile.Constraints(10,20);
-    private TrapezoidProfile.State goal = new TrapezoidProfile.State();
-    private TrapezoidProfile.State setpoint = new TrapezoidProfile.State();
+  private WPI_TalonFX leftMotor;
+  private WPI_TalonFX rightMotor;
+  /** Creates a new Elevator. */
+  public Elevator() {
+    leftMotor = new WPI_TalonFX(Constants.Elevator.LEFT_MOTOR_IDX);
+    rightMotor = new WPI_TalonFX(Constants.Elevator.RIGHT_MOTOR_IDX);
 
-    public Elevator() {
-        leftVerticalMotor = new CANSparkMax(Constants.Elevator.LEFT_MOTOR_IDX, MotorType.kBrushless);
-        SparkMaxPIDController pidController = leftVerticalMotor.getPIDController();
-        pidController.setP(Constants.Elevator.kP);
-        pidController.setI(Constants.Elevator.kI);
-        pidController.setD(Constants.Elevator.kD);
-        pidController.setOutputRange(-0.2, 0.2);
-        leftVerticalMotor.setSmartCurrentLimit(40);
+    leftMotor.configSelectedFeedbackSensor(FeedbackDevice.IntegratedSensor);
 
-        rightVerticalMotor = new CANSparkMax(Constants.Elevator.RIGHT_MOTOR_IDX, MotorType.kBrushless);
-        leftVerticalMotor.setSmartCurrentLimit(40);
-        rightVerticalMotor.follow(leftVerticalMotor);
-    }
+    leftMotor.configFactoryDefault();
+    rightMotor.configFactoryDefault();
 
-    public void stop() {
-        leftVerticalMotor.stopMotor();
-        rightVerticalMotor.stopMotor();
-    }
+    leftMotor.configMotionCruiseVelocity(Constants.Elevator.CRUISE_VELOCITY);
+    leftMotor.configMotionAcceleration(Constants.Elevator.ACCELERATION);
 
-    public void moveTo(double inches) {
-        goal = new TrapezoidProfile.State(inches, 0);
-    }
+    leftMotor.config_kP(Constants.Elevator.SLOT_IDX_VALUE, Constants.Elevator.kP);
+    leftMotor.config_kI(Constants.Elevator.SLOT_IDX_VALUE, Constants.Elevator.kI);
+    leftMotor.config_kD(Constants.Elevator.SLOT_IDX_VALUE, Constants.Elevator.kD);
 
-    public boolean isAtHeight(double inches) {
-        return true;
-    }
+    rightMotor.follow(leftMotor);
+  }
 
-    @Override
-    public void periodic() {
-        var profile = new TrapezoidProfile(motionProfile, goal, setpoint);
-        setpoint = profile.calculate(Constants.ROBOT_PERIOD);
+  public void stopMotors(){
+    leftMotor.set(ControlMode.PercentOutput, 0);
+    rightMotor.set(ControlMode.PercentOutput, 0);
+  }
 
-        leftVerticalMotor.getPIDController().setReference(setpoint.position, CANSparkMax.ControlType.kPosition);
-    }
+  public void moveTo(double inches){
+    double encoderTicks = inches / Constants.Elevator.GEAR_RATIO * Constants.Elevator.SPROCKET_PITCH_CIRCUMFERENCE / Constants.Elevator.FALCON_ENCODER_TICKS_PER_REVOLUTION;
+    leftMotor.set(ControlMode.MotionMagic, 1/encoderTicks, DemandType.ArbitraryFeedForward, Constants.Elevator.FEED_FORWARD);
+  }
+
+  public boolean atHeight(){
+    double error = Math.abs(leftMotor.getClosedLoopError());
+    return error < Constants.Elevator.ERROR_THRESHOLD; //error threshold
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
 }

@@ -72,6 +72,20 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
+    public static final double GEAR_RATIO = 2/1; //Need to check
+    public static final double FEED_FORWARD = 0.07;  //Need to check
+    public static final double SPROCKET_PITCH_CIRCUMFERENCE = 1.751 * Math.PI; 
+
+    public static final double ELEVATOR_MAX_HEIGHT = 0.07; 
+    public static final int SLOT_IDX_VALUE = 0; 
+
+    public static final double CRUISE_VELOCITY = 0; //Need to check value
+    public static final double ACCELERATION = 0; //Need to check value
+
+    public static final int FALCON_ENCODER_TICKS_PER_REVOLUTION = 2048;
+
+    public static final double ERROR_THRESHOLD = 0.5; //need to check
+
   }
 
   public static class Wrist {
@@ -101,6 +115,29 @@ public final class Constants {
 
   }
 
+  public static class LateralElevator{
+    public static final int LEFT_MOTOR_IDX = 11;
+    public static final int RIGHT_MOTOR_IDX = 12;
+
+    public static final double kP = 0.55;
+    public static final double kI = 0;
+    public static final double kD = 0;
+
+    public static final double GEAR_RATIO = 2/1; //Need to check
+    public static final double FEED_FORWARD = 0.07;  //Need to check
+    public static final double SPROCKET_PITCH_CIRCUMFERENCE = 0; //Need to check
+
+    public static final double ELEVATOR_MAX_HEIGHT = 0.07; 
+    public static final int SLOT_IDX_VALUE = 0; 
+
+    public static final double CRUISE_VELOCITY = 0; //Need to check value
+    public static final double ACCELERATION = 0; //Need to check value
+
+    public static final int FALCON_ENCODER_TICKS_PER_REVOLUTION = 2048;
+
+    public static final double ERROR_THRESHOLD = 0.5; //need to check
+  }
+
   public static class Auto {
     public static final double kMaxSpeedMetersPerSecond = 1;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
@@ -115,6 +152,8 @@ public final class Constants {
         new TrapezoidProfile.Constraints(
             kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
   }
+
+
 
 
 }
