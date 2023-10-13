@@ -7,10 +7,10 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.subsystems.Elevator;
 
-
 public class ElevateHigh extends CommandBase {
   /** Creates a new ElevateHigh. */
   private Elevator elevator;
+
   public ElevateHigh(Elevator elevator) {
     this.elevator = elevator;
     addRequirements(elevator);
