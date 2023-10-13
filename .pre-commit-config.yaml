@@ -1,0 +1,16 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.3.0
+  hooks:
+  - id: end-of-file-fixer
+    files: \.(java|c|h|hpp|cpp)$
+  - id: trailing-whitespace
+    files: \.(java|c|h|hpp|cpp)$
+  - id: no-commit-to-branch
+    args: [--branch, main]
+- repo: https://github.com/jguttman94/pre-commit-gradle
+  rev: v0.3.0
+  hooks:
+  - id: gradle-spotless
+    files: \.(java|c|h|hpp|cpp)$
+    args: [-w]
