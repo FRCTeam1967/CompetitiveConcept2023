@@ -4,16 +4,12 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
-import frc.robot.Constants;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
-import com.ctre.phoenix.motorcontrol.TalonFXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonFX;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Elevator extends SubsystemBase {
   private WPI_TalonFX leftMotor;
@@ -38,19 +34,27 @@ public class Elevator extends SubsystemBase {
     rightMotor.follow(leftMotor);
   }
 
-  public void stopMotors(){
+  public void stopMotors() {
     leftMotor.set(ControlMode.PercentOutput, 0);
     rightMotor.set(ControlMode.PercentOutput, 0);
   }
 
-  public void moveTo(double inches){
-    double encoderTicks = inches / Constants.Elevator.GEAR_RATIO * Constants.Elevator.SPROCKET_PITCH_CIRCUMFERENCE / Constants.Elevator.FALCON_ENCODER_TICKS_PER_REVOLUTION;
-    leftMotor.set(ControlMode.MotionMagic, 1/encoderTicks, DemandType.ArbitraryFeedForward, Constants.Elevator.FEED_FORWARD);
+  public void moveTo(double inches) {
+    double encoderTicks =
+        inches
+            / Constants.Elevator.GEAR_RATIO
+            * Constants.Elevator.SPROCKET_PITCH_CIRCUMFERENCE
+            / Constants.Elevator.FALCON_ENCODER_TICKS_PER_REVOLUTION;
+    leftMotor.set(
+        ControlMode.MotionMagic,
+        1 / encoderTicks,
+        DemandType.ArbitraryFeedForward,
+        Constants.Elevator.FEED_FORWARD);
   }
 
-  public boolean atHeight(){
+  public boolean atHeight() {
     double error = Math.abs(leftMotor.getClosedLoopError());
-    return error < Constants.Elevator.ERROR_THRESHOLD; //error threshold
+    return error < Constants.Elevator.ERROR_THRESHOLD; // error threshold
   }
 
   @Override

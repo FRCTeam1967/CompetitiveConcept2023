@@ -5,15 +5,14 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.ControlType;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import com.revrobotics.SparkMaxPIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import com.revrobotics.CANSparkMax.ControlType;
-
 
 public class Intake extends SubsystemBase {
-  
+
   private CANSparkMax motor;
   /** Creates a new Intake. */
   public Intake() {
@@ -26,11 +25,11 @@ public class Intake extends SubsystemBase {
     motor.setSmartCurrentLimit(40);
   }
 
-  public void runIntake(double x){
+  public void runIntake(double x) {
     motor.getPIDController().setReference(x, ControlType.kVelocity);
   }
 
-  public void stop(){
+  public void stop() {
     motor.stopMotor();
   }
 

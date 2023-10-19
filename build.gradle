@@ -1,6 +1,7 @@
 plugins {
     id "java"
-    id "edu.wpi.first.GradleRIO" version "2023.1.1"
+    id "edu.wpi.first.GradleRIO" version "2023.4.3"
+    id 'com.diffplug.spotless' version '6.12.0'
 }
 
 sourceCompatibility = JavaVersion.VERSION_11
@@ -96,4 +97,55 @@ wpi.java.configureTestTasks(test)
 // Configure string concat to always inline compile
 tasks.withType(JavaCompile) {
     options.compilerArgs.add '-XDstringConcat=inline'
+}
+
+// Configure Spotless code formatter
+spotless {
+    java {
+        target fileTree('.') {
+            include '**/*.java'
+            exclude '**/build/**', '**/build-*/**', 'venv/**'
+        }
+        toggleOffOn()
+        googleJavaFormat()
+        removeUnusedImports()
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    groovyGradle {
+        target fileTree('.') {
+            include '**/*.gradle'
+            exclude '**/build/**', '**/build-*/**', 'venv/**'
+        }
+        greclipse()
+        indentWithSpaces(4)
+        trimTrailingWhitespace()
+        endWithNewline()
+    }
+    format 'xml', {
+        target fileTree('.') {
+            include '**/*.xml'
+            exclude '**/build/**', '**/build-*/**', 'venv/**'
+        }
+        eclipseWtp('xml')
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+    format 'misc', {
+        target fileTree('.') {
+            include '**/*.md', '**/.gitignore'
+            exclude '**/build/**', '**/build-*/**', 'venv/**'
+        }
+        trimTrailingWhitespace()
+        indentWithSpaces(2)
+        endWithNewline()
+    }
+    python {
+        target fileTree('.') {
+            include '**/*.py'
+            exclude '**/build/**', '**/build-*/**', 'venv/**'
+        }
+        black("22.12.0")
+    }
 }
