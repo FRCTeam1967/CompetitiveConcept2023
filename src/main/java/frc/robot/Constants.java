@@ -72,7 +72,7 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double GEAR_RATIO = 2/1; //Need to check
+    public static final double GEAR_RATIO = 5; //Checked with Miuli and Teagan
     public static final double FEED_FORWARD = 0.07;  //Need to check
     public static final double SPROCKET_PITCH_CIRCUMFERENCE = 1.751 * Math.PI; 
 
@@ -95,7 +95,7 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double GEAR_RATIO = 0.1;
+    public static final double GEAR_RATIO = 0.1; //Mech said 75
 
     public static final double STARTING_ANGLE = 45;
 
@@ -123,7 +123,7 @@ public final class Constants {
     public static final double kI = 0;
     public static final double kD = 0;
 
-    public static final double GEAR_RATIO = 2/1; //Need to check
+    public static final double GEAR_RATIO = 5; //Checked with Miuli and Teagan
     public static final double FEED_FORWARD = 0.07;  //Need to check
     public static final double SPROCKET_PITCH_CIRCUMFERENCE = 0; //Need to check
 
