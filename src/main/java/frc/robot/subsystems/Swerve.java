@@ -31,6 +31,7 @@ public class Swerve extends SubsystemBase {
         backRight = new SwerveModule("BackRight", Constants.Swerve.BR_POWER, Constants.Swerve.BR_STEER);
         
         gyro = new ADIS16470_IMU();
+        
         odometry = new SwerveDriveOdometry(Constants.Swerve.SWERVE_DRIVE_KINEMATICS, getRotation2d(), 
         new SwerveModulePosition[] {
             frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
@@ -46,8 +47,12 @@ public class Swerve extends SubsystemBase {
 
     //takes in degrees and returns rotation object with desired angle
     public Rotation2d getRotation2d() {
-        var degrees = -gyro.getAngle() - 90;
+        var degrees = -gyro.getAngle();
         return Rotation2d.fromDegrees(degrees);
+    }
+
+    public double getYaw() {
+        return -gyro.getAngle();
     }
     
     public SwerveModuleState[] getModuleStates() {

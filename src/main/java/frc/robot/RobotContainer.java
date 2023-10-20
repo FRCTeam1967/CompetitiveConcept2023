@@ -38,10 +38,16 @@ import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Wrist;
 
 public class RobotContainer {
+
+  private final String alliance = "blue";
+  //private final String alliance = "red";
+
   private final Swerve swerve = new Swerve();
   // private final Elevator elevator = new Elevator();
   // private final Intake intake = new Intake();
   // private final Wrist wrist = new Wrist();
+
+  // SWERVE COMMANDS
 
   // ELEVATOR COMMANDS
   /*
@@ -90,8 +96,13 @@ public class RobotContainer {
   private void configureBindings() {
     // default commands are automatically scheduled - usually isFinished always
     // returns falses
-    swerve.setDefaultCommand(new SwerveDrive(swerve, () -> m_driverController.getRawAxis(0),
-        () -> m_driverController.getRawAxis(1), () -> m_driverController.getRawAxis(4)));
+    if (alliance == "blue") {
+      swerve.setDefaultCommand(new SwerveDrive(swerve, () -> m_driverController.getRawAxis(1),
+      () -> m_driverController.getRawAxis(0), () -> m_driverController.getRawAxis(4)));
+    } else {
+      swerve.setDefaultCommand(new SwerveDrive(swerve, () -> -m_driverController.getRawAxis(1),
+      () -> -m_driverController.getRawAxis(0), () -> -m_driverController.getRawAxis(4)));
+    }
 
     // m_driverController.button(4).onTrue(elevatorHigh);
     // move to 50 in and then move to 40 in - sequential commands

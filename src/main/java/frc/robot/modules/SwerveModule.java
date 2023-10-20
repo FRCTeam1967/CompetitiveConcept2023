@@ -19,10 +19,9 @@ public class SwerveModule {
     //creating both motors
     private CANSparkMax powerController;
     private CANSparkMax steerController;
+    private SparkMaxAbsoluteEncoder analogEncoder;
 
     private String name;
-
-    private SparkMaxAbsoluteEncoder analogEncoder = steerController.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
 
     public SwerveModule(String name, int powerIdx, int steerIdx) {
         this.name = name;
@@ -40,11 +39,13 @@ public class SwerveModule {
         
         steerController = new CANSparkMax(steerIdx, MotorType.kBrushless);
         steerController.restoreFactoryDefaults();
+        analogEncoder = steerController.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
         //defining PID for steer motor
         SparkMaxPIDController steerPIDController = steerController.getPIDController();
         steerPIDController.setP(Constants.Swerve.STEER_kP);
         steerPIDController.setI(Constants.Swerve.STEER_kI);
         steerPIDController.setD(Constants.Swerve.STEER_kD);
+        
         //using canandcoder for steer controller encoder
         //var analogEncoder = steerController.getAbsoluteEncoder(SparkMaxAbsoluteEncoder.Type.kDutyCycle);
         //set bit size depth for encoder at 16 (usually 16, 32, 64, etc)
@@ -66,6 +67,9 @@ public class SwerveModule {
         powerController.stopMotor();
         steerController.stopMotor();
     }
+
+     
+
 
     //get current state for module (velocity * gear ratio) and degrees from steer controller
     public SwerveModuleState getState() {
