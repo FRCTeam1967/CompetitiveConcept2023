@@ -133,7 +133,7 @@ public final class Constants {
     public static final double CRUISE_VELOCITY = 0; //Need to check value
     public static final double ACCELERATION = 0; //Need to check value
 
-    public static final int FALCON_ENCODER_TICKS_PER_REVOLUTION = 2048;
+    public static final int CANSPARKMAX_ENCODER_TICKS_PER_REVOLUTION = 42;
 
     public static final double ERROR_THRESHOLD = 0.5; //need to check
   }

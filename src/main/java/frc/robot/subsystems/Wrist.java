@@ -18,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Wrist extends SubsystemBase {
   /** Creates a new Wrist. */
 
-
-
   private CANSparkMax wristMotor;
   
   private TrapezoidProfile.Constraints motionProfile = new TrapezoidProfile.Constraints(10,20);
@@ -48,7 +46,7 @@ public class Wrist extends SubsystemBase {
   @Override
   public void periodic() {
     
-    var profile = new TrapezoidProfile(motionProfile, goal, setpoint);
+    TrapezoidProfile profile = new TrapezoidProfile(motionProfile, goal, setpoint);
     setpoint = profile.calculate(Constants.ROBOT_PERIOD);
 
     double degreesToRev = (setpoint.position/360) * Constants.Wrist.GEAR_RATIO;
