@@ -58,8 +58,8 @@ public final class Constants {
 
     public static final SwerveDriveKinematics SWERVE_DRIVE_KINEMATICS = new SwerveDriveKinematics(
         new Translation2d(-LENGTH / 2, WIDTH / 2),
-        new Translation2d(-LENGTH / 2, -WIDTH / 2),
         new Translation2d(LENGTH / 2, WIDTH / 2),
+        new Translation2d(-LENGTH / 2, -WIDTH / 2),
         new Translation2d(LENGTH / 2, -WIDTH / 2));
 
   }

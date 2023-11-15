@@ -82,6 +82,28 @@ public class SwerveModule {
             analogEncoder.getPosition()*Constants.Swerve.REV_TO_METERS, getState().angle);
       }
 
+    public static SwerveModuleState optimize(SwerveModuleState desiredState, Rotation2d currentAngle) {
+        double delta = (desiredState.angle.getDegrees() - currentAngle.getDegrees()) % 360;
+        if (delta > 180.0) {
+            delta += -360;
+        } else if (delta < 180.0) {
+            delta += 360.0;
+        }
+        double targetAngle_deg = currentAngle.getDegrees() + delta;
+
+        double targetSpeed_mps = desiredState.speedMetersPerSecond;
+
+        if (delta > 90.0) {
+            targetSpeed_mps = -targetSpeed_mps;
+            targetAngle_deg += 180.0;
+        } else if (delta < -90.0) {
+            targetSpeed_mps = -targetSpeed_mps;
+            targetAngle_deg += 180.0;
+        }
+
+        return new SwerveModuleState(targetSpeed_mps, Rotation2d.fromDegrees(targetAngle_deg));
+    }
+
     //takes in the desired state of module and sets it to the current state
     public void setState(SwerveModuleState state) {
         // if (state.speedMetersPerSecond * Constants.Swerve.COUNTS_PER_100MS < 400) {
@@ -90,7 +112,7 @@ public class SwerveModule {
         // }
 
         //minimize the change in heading of motor (ex: turn 90 deg instead of 270)
-        state = SwerveModuleState.optimize(state, getState().angle);
+        state = optimize(state, getState().angle);
         //set reference - set desired power and steer reference for each pid controller
         powerController.getPIDController().setReference(state.speedMetersPerSecond / Constants.Swerve.RPM_TO_MS, ControlType.kVelocity);
         steerController.getPIDController().setReference(state.angle.getDegrees(), ControlType.kPosition);
