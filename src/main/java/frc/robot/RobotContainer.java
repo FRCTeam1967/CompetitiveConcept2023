@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import java.util.List;
+import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -91,6 +92,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    //logSwerve(swerve, () -> -m_driverController.getRawAxis(1),  () -> m_driverController.getRawAxis(0), () -> -m_driverController.getRawAxis(4));
   }
 
   private void configureBindings() {
@@ -102,6 +104,7 @@ public class RobotContainer {
     // m_driverController.button(4).onTrue(elevatorHigh);
     // move to 50 in and then move to 40 in - sequential commands
     // m_driverController.button(5).onTrue(elevateAndWait.andThen(elevatorHigh));
+
   }
 
   public Command getAutonomousCommand() {
@@ -146,7 +149,26 @@ public class RobotContainer {
     // Reset odometry to the starting pose of the trajectory.
     swerve.resetOdometry(exampleTrajectory.getInitialPose());
 
-    // // Run path following command, then stop at the end.
+    // // Run path following command, then stop at the end
     return swerveControllerCommand.andThen(() -> swerve.stopModules());
   }
+
+  public void logSwerve(Swerve swerve, DoubleSupplier xSupplier, DoubleSupplier ySupplier, DoubleSupplier rotationSupplier) {
+
+    //logging desired field relative direction 
+
+    // xSupplier = () -> -m_driverController.getRawAxis(1);
+    // ySupplier = () -> -m_driverController.getRawAxis(0);
+    // rotationSupplier = () -> -m_driverController.getRawAxis(4);
+
+    // System.out.print("Y-motion: "+ xSupplier);
+    // System.out.print("X-motion: "+ ySupplier);
+    // System.out.print("rotation-motion: "+ rotationSupplier);
+    
+    // //logging desired robot relative direction
+    // System.out.println("Robot Yaw: " +  swerve.getYaw());
+
+  }
 }
+
+//next steps: left/right, tune PID, 

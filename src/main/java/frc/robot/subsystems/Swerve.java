@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
@@ -7,7 +8,10 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.ADIS16470_IMU;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import frc.robot.Constants;
 import frc.robot.modules.SwerveModule;
@@ -15,16 +19,22 @@ import frc.robot.modules.SwerveModule;
 public class Swerve extends SubsystemBase {
 
     //define each module
-    private final SwerveModule frontLeft;
-    private final SwerveModule frontRight;
-    private final SwerveModule backLeft;
-    private final SwerveModule backRight;
+    public final SwerveModule frontLeft;
+    public final SwerveModule frontRight;
+    public final SwerveModule backLeft;
+    public final SwerveModule backRight;
 
     private final ADIS16470_IMU gyro;
     private final SwerveDriveOdometry odometry;
+    
     private Pose2d pose;
+
+    private Field2d field = new Field2d();
     
     public Swerve() {
+        ShuffleboardTab controlBoardTab = Shuffleboard.getTab("Tuning");
+        controlBoardTab.add("field", field).withSize(11, 5).withPosition(1, 1);
+        
         frontLeft = new SwerveModule("FrontLeft", Constants.Swerve.FL_POWER, Constants.Swerve.FL_STEER);
         frontRight = new SwerveModule("FrontRight", Constants.Swerve.FR_POWER, Constants.Swerve.FR_STEER);
         backLeft = new SwerveModule("BackLeft", Constants.Swerve.BL_POWER, Constants.Swerve.BL_STEER);
@@ -92,7 +102,11 @@ public class Swerve extends SubsystemBase {
         frontLeft.getPosition(), frontRight.getPosition(), backLeft.getPosition(), backRight.getPosition()
       });
 
-      SmartDashboard.putNumber("gyro", gyro.getAngle());
+      field.setRobotPose(pose);
+
+
+
+
     }
 
 }
